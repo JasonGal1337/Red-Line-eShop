@@ -1,0 +1,35 @@
+.signup-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+  }
+  
+  .signup-container input {
+    width: 300px;
+    padding: 10px;
+    margin: 5px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+  }
+  
+  .signup-container button {
+    width: 150px;
+    padding: 10px;
+    margin: 10px;
+    border-radius: 5px;
+    background: #007bff;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .signup-container p {
+    margin: 5px;
+  }
+  
+  .signup-container a {
+    color: #007bff;
+    cursor: pointer;
+  }
