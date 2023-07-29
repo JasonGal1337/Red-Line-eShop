@@ -18,21 +18,28 @@ const signup = async (req,res) => {
     });
 };
 
-const login = async (req,res) => {
-    const admin = await Admin.findOne({ email: req.body.email });
-    if (admin) {
-        bcrypt.compare(req.body.password, admin.password, function(err,result) {
-            if (result) {
-                const token = jwt.sign({ id: admin._id }, "difficultPrivateKey");
-                res.send({ token });
-            } else {
-                res.send({ msg: "wrong password" });
-            };
-        });
-    } else {
-        res.send({ msg: "wrong email" });
+const login = async (req, res) => {
+    try {
+      const admin = await Admin.findOne({ username: req.body.username });
+  
+      if (admin) {
+        const result = await bcrypt.compare(req.body.password, admin.password);
+  
+        if (result && admin.isAdmin === true) {
+          // Passwords match, send the token
+          const token = jwt.sign({ id: admin._id }, "difficultPrivateKey");
+          res.send({ token });
+        } else {
+          res.send({ msg: "wrong password or isAdmin" });
+        }
+      } else {
+        // Admin not found
+        res.send({ msg: "wrong username" });
+      }
+    } catch (err) {
+      res.status(500).send({ msg: "Server error" });
     }
-};
+  };
 
 const verify = async (req,res) => {
     if (!req.body.token) {
@@ -63,5 +70,5 @@ const verify = async (req,res) => {
 module.exports = {
     signup,
     login,
-    verify
-}
+    verify,
+  };
