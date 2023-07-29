@@ -1,0 +1,23 @@
+/* Center the modal content vertically */
+.modal-dialog {
+    display: flex;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+  }
+  
+  /* Customize the width of the modal */
+  .modal-content {
+    max-width: 500px;
+    margin: auto;
+  }
+  
+  /* Center the modal title */
+  .modal-header {
+    text-align: center;
+  }
+  
+  /* Add some padding to the modal body */
+  .modal-body {
+    padding: 20px;
+  }

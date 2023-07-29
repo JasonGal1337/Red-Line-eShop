@@ -1,3 +1,4 @@
+/* signup css */ 
 .signup-container {
     display: flex;
     flex-direction: column;
@@ -33,3 +34,125 @@
     color: #007bff;
     cursor: pointer;
   }
+
+  /* login css */ 
+
+  .login-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+  }
+  
+  .login-container input {
+    width: 300px;
+    padding: 10px;
+    margin: 5px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+  }
+  
+  .login-container button {
+    width: 150px;
+    padding: 10px;
+    margin: 10px;
+    border-radius: 5px;
+    background: #007bff;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .login-container p {
+    margin: 5px;
+  }
+  
+  .login-container a {
+    color: #007bff;
+    cursor: pointer;
+  }
+
+  /* admin css */ 
+
+  .admin-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+  }
+  
+  .admin-container input {
+    width: 300px;
+    padding: 10px;
+    margin: 5px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+  }
+  
+  .admin-container button {
+    width: 150px;
+    padding: 10px;
+    margin: 10px;
+    border-radius: 5px;
+    background: #007bff;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+  }
+
+  /* admin main css */ 
+
+  .admin-main-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+  }
+  
+  .view-button {
+    width: 150px;
+    padding: 10px;
+    margin: 10px;
+    border-radius: 5px;
+    background: #007bff;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .action-buttons {
+    display: flex;
+  }
+  
+  .action-button {
+    width: 150px;
+    padding: 10px;
+    margin: 10px;
+    border-radius: 5px;
+    background: #28a745;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+  }
+  
+  /* Additional styling for arranging buttons in a line */
+  .action-buttons .action-button:first-child {
+    margin-right: 5px;
+  }
+  
+  .action-buttons .action-button:last-child {
+    margin-left: 5px;
+  }
+
+   /* Styles for Card */
+ .card-title {
+  letter-spacing: 0.07rem;
+}
+
+.card-text {
+  color: #555;
+  margin-bottom: 0.6rem;
+}

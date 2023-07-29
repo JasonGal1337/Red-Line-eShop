@@ -26,7 +26,7 @@ function Login() {
     }    
 
     return (
-      <div>
+      <div className='login-container'>
         <input type="email" placeholder="email" onChange={(e) => {setEmail(e.target.value)}} />
         <input type="password" placeholder="password" onChange={(e) => {setPassword(e.target.value)}} />
         <button onClick={()=> {login();}}>Login</button>
