@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from 'react-router-dom';
 import './index.css';
@@ -6,11 +6,12 @@ import CategoryModal from './components/CategoryModal';
 import "bootstrap/dist/css/bootstrap.min.css";
 
 function AdminMain() {
-// verify that visitor is an admin
-const [admin, setAdmin] = useState({
-  _id: "",
-  username: "",
-});
+  const [admin, setAdmin] = useState({
+    _id: "",
+    username: "",
+  });
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (localStorage.getItem("token")) {
@@ -39,15 +40,17 @@ const [admin, setAdmin] = useState({
     setShowCategoryModal(false);
   };
 
-  const handleCategorySubmit = (e) => {
-    e.preventDefault();
+  const handleCategoryModalSubmit = (data) => {
+    const { title, description, selectedImage } = data;
+  
     axios
-      .post("http://localhost:4000/category/post", {
+      .post("http://localhost:4000/category", {
         title,
-        description
+        description,
+        image: selectedImage,
       })
-      .then((data) => {
-        console.log(data);
+      .then((response) => {
+        console.log(response.data);
       })
       .catch((error) => console.log(error));
   };
@@ -62,11 +65,10 @@ const [admin, setAdmin] = useState({
         </button>
         <button className='action-button'>New Product</button>
       </div>
-      {/* Render the CategoryModal component with appropriate props */}
       <CategoryModal
-        show={showCategoryModal}
-        handleClose={handleCloseCategoryModal}
-        handleSubmit={handleCategorySubmit}
+       show={showCategoryModal}
+       handleClose={handleCloseCategoryModal}
+       handleSubmit={handleCategoryModalSubmit}
       />
     </div>
   );
