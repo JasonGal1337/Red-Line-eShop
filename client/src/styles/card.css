@@ -1,0 +1,33 @@
+.card-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; /* Align items to the left side */
+  max-width: 20rem;
+  margin: 0 auto; /* This centers the card horizontally */
+  margin-bottom: 1rem;
+  padding: 0.75rem;
+}
+
+/* Card image */
+.card-container img {
+  max-height: 200px; /* Adjust the height of the image as needed */
+  object-fit: cover;
+}
+
+/* Card title */
+.card-title {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+/* Card description */
+.card-text {
+  font-size: 0.9rem;
+  margin-bottom: 0.5rem;
+}
+
+/* Delete button */
+.card-delete-button {
+  align-self: flex-start; /* Align the delete button to the left side */
+}

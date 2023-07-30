@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
 import axios from 'axios';
 
-const CategoryModal = ({ show, handleClose }) => {
+const NewCategoryModal = ({ show, handleClose, handleAddNewCategory }) => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [selectedImage, setSelectedImage] = useState(null);
@@ -27,7 +27,7 @@ const CategoryModal = ({ show, handleClose }) => {
     formData.append('title', title);
     formData.append('description', description);
     formData.append('selectedImage', selectedImage);
-  
+
     // Send the form data to the backend for image upload
     axios.post("http://localhost:4000/category", formData, {
       headers: {
@@ -35,8 +35,16 @@ const CategoryModal = ({ show, handleClose }) => {
       }
     })
     .then((response) => {
-      const imageUrl = response.data.imageUrl;
-  
+      const newCategory = {
+        _id: response.data._id,
+        title,
+        description,
+        image: {
+          url: response.data.imageUrl
+        }
+      };
+
+      handleAddNewCategory(newCategory); // Pass the new category back to the parent component
       setTitle('');
       setDescription('');
       setSelectedImage(null);
@@ -89,11 +97,11 @@ const CategoryModal = ({ show, handleClose }) => {
           Close
         </Button>
         <Button variant="primary" onClick={handleSubmitClick}>
-  Submit
-</Button>
+          Submit
+        </Button>
       </Modal.Footer>
     </Modal>
   );
 };
 
-export default CategoryModal;
+export default NewCategoryModal;
