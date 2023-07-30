@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
+import axios from 'axios';
 
-const CategoryModal = ({ show, handleClose, handleSubmit }) => {
+const CategoryModal = ({ show, handleClose }) => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [selectedImage, setSelectedImage] = useState(null);
@@ -17,31 +18,32 @@ const CategoryModal = ({ show, handleClose, handleSubmit }) => {
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
-    setFileToBase(file);
-  };
-
-  const setFileToBase = (file) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onloadend = () => {
-      setSelectedImage(reader.result);
-      setPreviewImage(URL.createObjectURL(file));
-    };
+    setSelectedImage(file);
+    setPreviewImage(URL.createObjectURL(file));
   };
 
   const handleSubmitClick = () => {
     const formData = new FormData();
     formData.append('title', title);
     formData.append('description', description);
-    formData.append('file', selectedImage);
+    formData.append('selectedImage', selectedImage);
   
-    handleSubmit({ title, description, selectedImage }); 
+    // Send the form data to the backend for image upload
+    axios.post("http://localhost:4000/category", formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    })
+    .then((response) => {
+      const imageUrl = response.data.imageUrl;
   
-    setTitle('');
-    setDescription('');
-    setSelectedImage(null);
-    setPreviewImage(null);
-    handleClose(); 
+      setTitle('');
+      setDescription('');
+      setSelectedImage(null);
+      setPreviewImage(null);
+      handleClose();
+    })
+    .catch((error) => console.log(error));
   };
 
   return (
@@ -72,7 +74,7 @@ const CategoryModal = ({ show, handleClose, handleSubmit }) => {
           </Form.Group>
           <Form.Group controlId="categoryImage">
             <Form.Label>Image</Form.Label>
-            <Form.Control type="file" onChange={handleImageChange} />
+            <Form.Control type="file" name="selectedImage" onChange={handleImageChange} />
           </Form.Group>
           {previewImage && (
             <div>

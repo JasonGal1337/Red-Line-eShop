@@ -4,7 +4,7 @@ const app = express();
 
 const db = require('./modules/connection.js');
 
-app.use(express.json({limit:'50mb'}));
+app.use(express.json());
 
 const userRouter = require("./routers/userRouter");
 const adminRouter = require("./routers/adminRouter");

@@ -13,6 +13,7 @@ function AdminMain() {
 
   const navigate = useNavigate();
 
+  // verify admin is logged in to display the page
   useEffect(() => {
     if (localStorage.getItem("token")) {
       axios
@@ -31,28 +32,13 @@ function AdminMain() {
   }, []);
 
   const [showCategoryModal, setShowCategoryModal] = useState(false);
-
+  
   const handleOpenNewCategoryModal = () => {
     setShowCategoryModal(true);
   };
 
   const handleCloseCategoryModal = () => {
     setShowCategoryModal(false);
-  };
-
-  const handleCategoryModalSubmit = (data) => {
-    const { title, description, selectedImage } = data;
-  
-    axios
-      .post("http://localhost:4000/category", {
-        title,
-        description,
-        image: selectedImage,
-      })
-      .then((response) => {
-        console.log(response.data);
-      })
-      .catch((error) => console.log(error));
   };
 
   return (
@@ -66,9 +52,8 @@ function AdminMain() {
         <button className='action-button'>New Product</button>
       </div>
       <CategoryModal
-       show={showCategoryModal}
-       handleClose={handleCloseCategoryModal}
-       handleSubmit={handleCategoryModalSubmit}
+        show={showCategoryModal}
+        handleClose={handleCloseCategoryModal}
       />
     </div>
   );
