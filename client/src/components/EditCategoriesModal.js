@@ -21,7 +21,7 @@ const EditCategoriesModal = ({ show, handleClose, categoryToEdit, handleSaveChan
     setPreviewImage(URL.createObjectURL(file));
   };
 
-  const handleSaveChangesClick = () => {
+  const handleSaveChangesSubmit = () => {
     // Check if categoryToEdit and its image property exist before accessing the url
     if (categoryToEdit && categoryToEdit.image) {
       if (selectedImage) {
@@ -83,7 +83,7 @@ const EditCategoriesModal = ({ show, handleClose, categoryToEdit, handleSaveChan
         <Button variant="secondary" onClick={handleClose}>
           Close
         </Button>
-        <Button variant="primary" onClick={handleSaveChangesClick}>
+        <Button variant="primary" onClick={handleSaveChangesSubmit}>
           Save Changes
         </Button>
       </Modal.Footer>

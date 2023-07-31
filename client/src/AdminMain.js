@@ -15,7 +15,7 @@ function AdminMain() {
 
   const navigate = useNavigate();
 
-  // verify admin is logged in to display the page
+  // verify admin is logged in else redirect to /admin
   useEffect(() => {
     if (localStorage.getItem("token")) {
       axios
@@ -36,11 +36,11 @@ function AdminMain() {
   const [showNewCategoryModal, setShowNewCategoryModal] = useState(false);
   const [showViewCategoriesModal, setShowViewCategoriesModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
-  const [categories, setCategories] = useState([]); // State to store the categories
-  const [categoryToEdit, setCategoryToEdit] = useState(null);
+  const [categories, setCategories] = useState([]); 
+  const [categoryToEdit, setCategoryToEdit] = useState(null); 
 
   useEffect(() => {
-    fetchCategories(); // Fetch categories initially when component mounts
+    fetchCategories(); 
   }, []);
 
   const fetchCategories = () => {
@@ -58,7 +58,7 @@ function AdminMain() {
     axios
       .delete(`http://localhost:4000/category/${categoryId}`)
       .then(() => {
-        // Update the categories state to remove the deleted category
+        // Update categories after deletion
         setCategories((prevCategories) =>
           prevCategories.filter((category) => category._id !== categoryId)
         );
@@ -70,7 +70,6 @@ function AdminMain() {
   };
 
   const handleSaveChanges = (categoryId, updatedCategoryData) => {
-    // Update the category on the server-side using the PUT request
     axios
       .put(`http://localhost:4000/category/${categoryId}`, updatedCategoryData, {
         headers: {
@@ -79,27 +78,15 @@ function AdminMain() {
       })
       .then((response) => {
         console.log(response)
-        // Update the state with the edited category
-        const updatedCategory = {
-          ...response.data,
-          image: {
-            ...response.data.image,
-          },
-        };
-
-        setCategories((prevCategories) =>
-          prevCategories.map((category) => (category._id === categoryId ? updatedCategory : category))
-        );
-
-        window.location.reload();
-
+        // after edit fetch categories again
+          fetchCategories(); 
       })
       .catch((error) => console.log(error));
   };
 
   const handleOpenViewCategoriesModal = () => {
     setShowViewCategoriesModal(true);
-    setShowNewCategoryModal(false); // Hide the other modal if it's open
+    setShowNewCategoryModal(false); 
   };
 
   const handleCloseViewCategoriesModal = () => {
@@ -108,7 +95,7 @@ function AdminMain() {
 
   const handleOpenNewCategoryModal = () => {
     setShowNewCategoryModal(true);
-    setShowViewCategoriesModal(false); // Hide the other modal if it's open
+    setShowViewCategoriesModal(false); 
   };
 
   const handleCloseNewCategoryModal = () => {
