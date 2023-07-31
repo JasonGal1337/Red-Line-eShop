@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import './index.css';
 import NewCategoryModal from './components/NewCategoryModal';
 import DisplayCategoriesModal from './components/DisplayCategoriesModal';
+import EditCategoriesModal from './components/EditCategoriesModal';
 import "bootstrap/dist/css/bootstrap.min.css";
 
 function AdminMain() {
@@ -34,7 +35,9 @@ function AdminMain() {
 
   const [showNewCategoryModal, setShowNewCategoryModal] = useState(false);
   const [showViewCategoriesModal, setShowViewCategoriesModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
   const [categories, setCategories] = useState([]); // State to store the categories
+  const [categoryToEdit, setCategoryToEdit] = useState(null);
 
   useEffect(() => {
     fetchCategories(); // Fetch categories initially when component mounts
@@ -66,15 +69,32 @@ function AdminMain() {
       });
   };
 
-  const handleCategoryEdit = (updatedCategory) => {
-    // Update the state with the edited category
-    setCategories((prevCategories) =>
-      prevCategories.map((category) =>
-        category._id === updatedCategory._id ? updatedCategory : category
-      )
-    );
-    console.log("Category edited successfully!");
-    setShowViewCategoriesModal(false); // Close the EditCategoriesModal after editing
+  const handleSaveChanges = (categoryId, updatedCategoryData) => {
+    // Update the category on the server-side using the PUT request
+    axios
+      .put(`http://localhost:4000/category/${categoryId}`, updatedCategoryData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      })
+      .then((response) => {
+        console.log(response)
+        // Update the state with the edited category
+        const updatedCategory = {
+          ...response.data,
+          image: {
+            ...response.data.image,
+          },
+        };
+
+        setCategories((prevCategories) =>
+          prevCategories.map((category) => (category._id === categoryId ? updatedCategory : category))
+        );
+
+        window.location.reload();
+
+      })
+      .catch((error) => console.log(error));
   };
 
   const handleOpenViewCategoriesModal = () => {
@@ -85,7 +105,7 @@ function AdminMain() {
   const handleCloseViewCategoriesModal = () => {
     setShowViewCategoriesModal(false);
   };
-  
+
   const handleOpenNewCategoryModal = () => {
     setShowNewCategoryModal(true);
     setShowViewCategoriesModal(false); // Hide the other modal if it's open
@@ -93,6 +113,15 @@ function AdminMain() {
 
   const handleCloseNewCategoryModal = () => {
     setShowNewCategoryModal(false);
+  };
+
+  const handleCloseEditModal = () => {
+    setShowEditModal(false);
+  };
+
+  const handleEditClick = (category) => {
+    setCategoryToEdit(category);
+    setShowEditModal(true);
   };
 
   const handleAddNewCategory = (newCategory) => {
@@ -113,17 +142,25 @@ function AdminMain() {
         <button className='action-button'>New Product</button>
       </div>
       <DisplayCategoriesModal
-       show={showViewCategoriesModal}
-       handleClose={handleCloseViewCategoriesModal}
-       categories={categories}
-       handleCategoryDelete={handleCategoryDelete} 
-       handleEditCategory={handleCategoryEdit} 
+        show={showViewCategoriesModal}
+        handleClose={handleCloseViewCategoriesModal}
+        categories={categories}
+        handleCategoryDelete={handleCategoryDelete}
+        handleEditClick={handleEditClick}
       />
       <NewCategoryModal
         show={showNewCategoryModal}
         handleClose={handleCloseNewCategoryModal}
         handleAddNewCategory={handleAddNewCategory}
       />
+      {categoryToEdit && (
+        <EditCategoriesModal
+          show={showEditModal}
+          handleClose={handleCloseEditModal}
+          categoryToEdit={categoryToEdit}
+          handleSaveChanges={handleSaveChanges}
+        />
+      )}
     </div>
   );
 }

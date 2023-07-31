@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
 
-const EditCategoriesModal = ({ show, handleClose, categoryToEdit, handleEditCategory }) => {
+const EditCategoriesModal = ({ show, handleClose, categoryToEdit, handleSaveChanges }) => {
   const [title, setTitle] = useState(categoryToEdit.title);
   const [description, setDescription] = useState(categoryToEdit.description);
   const [selectedImage, setSelectedImage] = useState(null);
-  const [previewImage, setPreviewImage] = useState(null);
+  const [previewImage, setPreviewImage] = useState(categoryToEdit.image.url);
 
   const handleTitleChange = (e) => {
     setTitle(e.target.value);
@@ -21,19 +21,24 @@ const EditCategoriesModal = ({ show, handleClose, categoryToEdit, handleEditCate
     setPreviewImage(URL.createObjectURL(file));
   };
 
-  const handleSubmitClick = () => {
-    // Form the updated category object
-    const updatedCategory = {
-      _id: categoryToEdit._id,
-      title,
-      description,
-      image: categoryToEdit.image // Maintain the existing image data without updating it
-    };
+  const handleSaveChangesClick = () => {
+    // Check if categoryToEdit and its image property exist before accessing the url
+    if (categoryToEdit && categoryToEdit.image) {
+      if (selectedImage) {
+        handleSaveChanges(categoryToEdit._id, {
+          title,
+          description,
+          selectedImage
+        });
+      } else {
+        handleSaveChanges(categoryToEdit._id, {
+          title,
+          description
+        });
+      }
 
-    // Call the callback function to update the category
-    handleEditCategory(updatedCategory);
-
-    handleClose();
+      handleClose();
+    }
   };
 
   return (
@@ -78,7 +83,7 @@ const EditCategoriesModal = ({ show, handleClose, categoryToEdit, handleEditCate
         <Button variant="secondary" onClick={handleClose}>
           Close
         </Button>
-        <Button variant="primary" onClick={handleSubmitClick}>
+        <Button variant="primary" onClick={handleSaveChangesClick}>
           Save Changes
         </Button>
       </Modal.Footer>

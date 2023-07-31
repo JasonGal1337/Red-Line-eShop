@@ -1,26 +1,11 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Modal, Button } from 'react-bootstrap';
 import CategoriesCard from "./CategoriesCard";
-import EditCategoriesModal from "./EditCategoriesModal"; // Import the EditCategoriesModal
 
-const DisplayCategoriesModal = ({ show, handleClose, categories, handleCategoryDelete, handleCategoryEdit, setCategories }) => {
-  const [showEditModal, setShowEditModal] = useState(false);
-  const [categoryToEdit, setCategoryToEdit] = useState(null);
+const DisplayCategoriesModal = ({ show, handleClose, categories, handleCategoryDelete, handleEditClick }) => {
 
-  const handleEditClick = (category) => {
-    setCategoryToEdit(category);
-    setShowEditModal(true);
-  };
-
-  const handleEditCategory = (updatedCategory) => {
-    // Update the state with the edited category
-    setCategories((prevCategories) =>
-      prevCategories.map((category) =>
-        category._id === updatedCategory._id ? updatedCategory : category
-      )
-    );
-    console.log("Category edited successfully!");
-    setShowEditModal(false); // Close the EditCategoriesModal after editing
+  const handleEditClickWrapper = (category) => {
+    handleEditClick(category);
   };
 
   return (
@@ -29,14 +14,14 @@ const DisplayCategoriesModal = ({ show, handleClose, categories, handleCategoryD
         <Modal.Title>Categories</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        {categories.map((category) => (
+        {categories.map((category, index) => (
           <CategoriesCard
-            key={category._id}
+            key={index}
             title={category.title}
             description={category.description}
             image={category.image.url}
             onDelete={() => handleCategoryDelete(category._id)}
-            onEdit={() => handleEditClick(category)}
+            onEdit={() => handleEditClickWrapper(category)}
           />
         ))}
       </Modal.Body>
@@ -45,16 +30,6 @@ const DisplayCategoriesModal = ({ show, handleClose, categories, handleCategoryD
           Close
         </Button>
       </Modal.Footer>
-
-      {/* Render the EditCategoriesModal */}
-      {categoryToEdit && (
-        <EditCategoriesModal
-          show={showEditModal}
-          handleClose={() => setShowEditModal(false)}
-          categoryToEdit={categoryToEdit}
-          handleEditCategory={handleEditCategory}
-        />
-      )}
     </Modal>
   );
 };
