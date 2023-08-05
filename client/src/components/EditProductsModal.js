@@ -1,15 +1,14 @@
 import React, { useState } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
-import axios from 'axios';
 
-const NewProductModal = ({ show, handleClose, handleAddNewProduct }) => {
-  const [productTitle, setProductTitle] = useState('');
-  const [productDescription, setProductDescription] = useState('');
-  const [productPrice, setProductPrice] = useState('');
-  const [productTechnicalInformation, setProductTechnicalInformation] = useState('');
-  const [productStockQuantity, setProductStockQuantity] = useState('');
+const EditProductsModal = ({ show, handleClose, productToEdit, handleSaveChanges }) => {
+  const [productTitle, setProductTitle] = useState(productToEdit.title);
+  const [productDescription, setProductDescription] = useState(productToEdit.description);
+  const [productPrice, setProductPrice] = useState(productToEdit.price);
+  const [productTechnicalInformation, setProductTechnicalInformation] = useState(productToEdit.technicalInformation);
+  const [productStockQuantity, setProductStockQuantity] = useState(productToEdit.stockQuantity);
   const [selectedProductImages, setSelectedProductImages] = useState([]);
-  const [previewProductImages, setPreviewProductImages] = useState([]);
+  const [previewProductImages, setPreviewProductImages] = useState(productToEdit.images.map((image) => image.url));
 
   const handleProductTitleChange = (e) => {
     setProductTitle(e.target.value);
@@ -41,53 +40,27 @@ const NewProductModal = ({ show, handleClose, handleAddNewProduct }) => {
     setPreviewProductImages((prevPreview) => [...prevPreview, ...imagesPreview]);
   };
 
-  const handleProductSubmitClick = () => {
-    const formData = new FormData();
-    formData.append('title', productTitle);
-    formData.append('description', productDescription);
-    formData.append('price', productPrice);
-    formData.append('technicalInformation', productTechnicalInformation);
-    formData.append('stockQuantity', productStockQuantity);
+  const handleSaveProductChangesSubmit = () => {
+    // Check if productToEdit and its images property exist before accessing the images array
+    if (productToEdit && productToEdit.images) {
+      const formData = new FormData();
+      formData.append('title', productTitle);
+      formData.append('description', productDescription);
+      formData.append('price', productPrice);
+      formData.append('technicalInformation', productTechnicalInformation);
+      formData.append('stockQuantity', productStockQuantity);
 
-    selectedProductImages.forEach((image) => formData.append('productImages', image));
+      selectedProductImages.forEach((image) => formData.append('productImages', image));
 
-    // Send the form data to the backend for image upload
-    axios
-      .post('http://localhost:4000/product', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      })
-      .then((response) => {
-        const newProduct = {
-          _id: response.data._id,
-          title: productTitle,
-          description: productDescription,
-          price: productPrice,
-          technicalInformation: productTechnicalInformation,
-          stockQuantity: productStockQuantity,
-          images: response.data.images.map((image) => ({
-            url: image.url,
-          })),
-        };
-
-        handleAddNewProduct(newProduct); // Pass the new product back to the parent component
-        setProductTitle('');
-        setProductDescription('');
-        setProductPrice('');
-        setProductTechnicalInformation('');
-        setProductStockQuantity('');
-        setSelectedProductImages([]);
-        setPreviewProductImages([]);
-        handleClose();
-      })
-      .catch((error) => console.log(error));
+      handleSaveProductChanges(productToEdit._id, formData);
+      handleClose();
+    }
   };
 
   return (
     <Modal show={show} onHide={handleClose}>
       <Modal.Header closeButton>
-        <Modal.Title>Add Product</Modal.Title>
+        <Modal.Title>Edit Product</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Form>
@@ -145,12 +118,12 @@ const NewProductModal = ({ show, handleClose, handleAddNewProduct }) => {
         <Button variant="secondary" onClick={handleClose}>
           Close
         </Button>
-        <Button variant="primary" onClick={handleProductSubmitClick}>
-          Submit
+        <Button variant="primary" onClick={handleSaveProductChangesSubmit}>
+          Save Changes
         </Button>
       </Modal.Footer>
     </Modal>
   );
 };
 
-export default NewProductModal;
+export default EditProductsModal;
