@@ -5,6 +5,9 @@ import './index.css';
 import NewCategoryModal from './components/NewCategoryModal';
 import DisplayCategoriesModal from './components/DisplayCategoriesModal';
 import EditCategoriesModal from './components/EditCategoriesModal';
+import NewProductModal from './components/NewProductModal'; // Add the new product modal
+import DisplayProductsModal from './components/DisplayProductsModal'; // Add the display products modal
+import EditProductsModal from './components/EditProductsModal'; // Add the edit products modal
 import "bootstrap/dist/css/bootstrap.min.css";
 
 function AdminMain() {
@@ -33,6 +36,7 @@ function AdminMain() {
     }
   }, []);
 
+  // category code start 
   const [showNewCategoryModal, setShowNewCategoryModal] = useState(false);
   const [showViewCategoriesModal, setShowViewCategoriesModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
@@ -79,7 +83,7 @@ function AdminMain() {
       .then((response) => {
         console.log(response)
         // after edit fetch categories again
-          fetchCategories(); 
+        fetchCategories(); 
       })
       .catch((error) => console.log(error));
   };
@@ -115,30 +119,132 @@ function AdminMain() {
     // Update the categories state with the new category
     setCategories((prevCategories) => [...prevCategories, newCategory]);
   };
+  // category code end 
+
+  // product code start 
+  const [showNewProductModal, setShowNewProductModal] = useState(false);
+  const [showViewProductsModal, setShowViewProductsModal] = useState(false);
+  const [showEditProductModal, setShowEditProductModal] = useState(false);
+  const [products, setProducts] = useState([]); 
+  const [productToEdit, setProductToEdit] = useState(null); 
+
+  useEffect(() => {
+    fetchProducts(); 
+  }, []);
+
+  const fetchProducts = () => {
+    axios
+      .get("http://localhost:4000/product")
+      .then((response) => {
+        setProducts(response.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching products:", error);
+      });
+  };
+
+  const handleProductDelete = (productId) => {
+    axios
+      .delete(`http://localhost:4000/product/${productId}`)
+      .then(() => {
+        // Update products after deletion
+        setProducts((prevProducts) =>
+          prevProducts.filter((product) => product._id !== productId)
+        );
+        console.log("Product deleted successfully!");
+      })
+      .catch((error) => {
+        console.error("Error deleting product:", error);
+      });
+  };
+
+  const handleSaveProductChanges = (productId, updatedProductData) => {
+    axios
+      .put(`http://localhost:4000/product/${productId}`, updatedProductData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      })
+      .then((response) => {
+        console.log(response)
+        // after edit fetch products again
+        fetchProducts(); 
+      })
+      .catch((error) => console.log(error));
+  };
+
+  const handleOpenViewProductsModal = () => {
+    setShowViewProductsModal(true);
+    setShowNewProductModal(false); 
+  };
+
+  const handleCloseViewProductsModal = () => {
+    setShowViewProductsModal(false);
+  };
+
+  const handleOpenNewProductModal = () => {
+    setShowNewProductModal(true);
+    setShowViewProductsModal(false); 
+  };
+
+  const handleCloseNewProductModal = () => {
+    setShowNewProductModal(false);
+  };
+
+  const handleCloseEditProductModal = () => {
+    setShowEditProductModal(false);
+  };
+
+  const handleProductEditClick = (product) => {
+    setProductToEdit(product);
+    setShowEditProductModal(true);
+  };
+
+  const handleAddNewProduct = (newProduct) => {
+    // Update the products state with the new product
+    setProducts((prevProducts) => [...prevProducts, newProduct]);
+  };
+  // product code end
 
   return (
     <div className='admin-main-container'>
       <button className='view-button' onClick={handleOpenViewCategoriesModal}>
         View Categories
       </button>
-      <button className='view-button'>View Products</button>
+      <button className='view-button' onClick={handleOpenViewProductsModal}>
+        View Products
+      </button>
       <div className='action-buttons'>
         <button className='action-button' onClick={handleOpenNewCategoryModal}>
           New Category
         </button>
-        <button className='action-button'>New Product</button>
+        <button className='action-button' onClick={handleOpenNewProductModal}>
+          New Product
+        </button>
       </div>
       <DisplayCategoriesModal
         show={showViewCategoriesModal}
         handleClose={handleCloseViewCategoriesModal}
         categories={categories}
         handleCategoryDelete={handleCategoryDelete}
-        handleEditClick={handleEditClick}
+        handleCategoryEditClick={handleEditClick} // Update the prop name to handleCategoryEditClick
+      />
+      <DisplayProductsModal
+        show={showViewProductsModal}
+        handleClose={handleCloseViewProductsModal}
+        products={products}
+        handleProductDelete={handleProductDelete}
+        handleProductEditClick={handleProductEditClick}
       />
       <NewCategoryModal
         show={showNewCategoryModal}
         handleClose={handleCloseNewCategoryModal}
         handleAddNewCategory={handleAddNewCategory}
+      />
+      <NewProductModal
+        show={showNewProductModal}
+        handleClose={handleCloseNewProductModal}
+        handleAddNewProduct={handleAddNewProduct}
       />
       {categoryToEdit && (
         <EditCategoriesModal
@@ -146,6 +252,14 @@ function AdminMain() {
           handleClose={handleCloseEditModal}
           categoryToEdit={categoryToEdit}
           handleSaveChanges={handleSaveChanges}
+        />
+      )}
+      {productToEdit && (
+        <EditProductsModal
+          show={showEditProductModal}
+          handleClose={handleCloseEditProductModal}
+          productToEdit={productToEdit}
+          handleSaveProductChanges={handleSaveProductChanges}
         />
       )}
     </div>
