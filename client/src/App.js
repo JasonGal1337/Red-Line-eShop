@@ -3,7 +3,7 @@ import Login from "./login";
 import Signup from "./signup";
 import Homepage from "./homepage";
 import Admin from "./admin";
-import AdminMain from "./AdminMain.js"
+import AdminMain from "./AdminMain";
 
 function App() {
   return (
