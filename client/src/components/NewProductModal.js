@@ -2,14 +2,15 @@ import React, { useState } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
 import axios from 'axios';
 
-const NewProductModal = ({ show, handleClose, handleAddNewProduct }) => {
-  const [productTitle, setProductTitle] = useState('');
-  const [productDescription, setProductDescription] = useState('');
-  const [productPrice, setProductPrice] = useState('');
-  const [productTechnicalInformation, setProductTechnicalInformation] = useState('');
-  const [productStockQuantity, setProductStockQuantity] = useState('');
-  const [selectedProductImages, setSelectedProductImages] = useState([]);
-  const [previewProductImages, setPreviewProductImages] = useState([]);
+const NewProductModal = ({ show, handleClose, handleAddNewProduct, categories }) => {
+    const [productTitle, setProductTitle] = useState('');
+    const [productDescription, setProductDescription] = useState('');
+    const [productPrice, setProductPrice] = useState('');
+    const [productTechnicalInformation, setProductTechnicalInformation] = useState('');
+    const [productStockQuantity, setProductStockQuantity] = useState('');
+    const [selectedProductImages, setSelectedProductImages] = useState([]);
+    const [previewProductImages, setPreviewProductImages] = useState([]);
+    const [selectedCategories, setSelectedCategories] = useState([]);
 
   const handleProductTitleChange = (e) => {
     setProductTitle(e.target.value);
@@ -31,6 +32,16 @@ const NewProductModal = ({ show, handleClose, handleAddNewProduct }) => {
     setProductStockQuantity(e.target.value);
   };
 
+  const handleCategoryClick = (categoryId) => {
+    setSelectedCategories((prevSelectedCategories) => {
+      if (prevSelectedCategories.includes(categoryId)) {
+        return prevSelectedCategories.filter((id) => id !== categoryId);
+      } else {
+        return [...prevSelectedCategories, categoryId];
+      }
+    });
+  };
+
   const handleProductImageChange = (e) => {
     const files = e.target.files;
     const newImages = Array.from(files);
@@ -49,9 +60,9 @@ const NewProductModal = ({ show, handleClose, handleAddNewProduct }) => {
     formData.append('technicalInformation', productTechnicalInformation);
     formData.append('stockQuantity', productStockQuantity);
 
+    selectedCategories.forEach((id) => formData.append('categories', id));
+  
     selectedProductImages.forEach((image) => formData.append('productImages', image));
-
-    // Send the form data to the backend for image upload
     axios
       .post('http://localhost:4000/product', formData, {
         headers: {
@@ -59,6 +70,7 @@ const NewProductModal = ({ show, handleClose, handleAddNewProduct }) => {
         },
       })
       .then((response) => {
+        console.log(response);
         const newProduct = {
           _id: response.data._id,
           title: productTitle,
@@ -66,12 +78,13 @@ const NewProductModal = ({ show, handleClose, handleAddNewProduct }) => {
           price: productPrice,
           technicalInformation: productTechnicalInformation,
           stockQuantity: productStockQuantity,
-          images: response.data.images.map((image) => ({
+          categories: selectedCategories, // Use the selected categories directly
+          images: response.data.product.images.map((image) => ({
             url: image.url,
           })),
         };
-
-        handleAddNewProduct(newProduct); // Pass the new product back to the parent component
+  
+        handleAddNewProduct(newProduct);
         setProductTitle('');
         setProductDescription('');
         setProductPrice('');
@@ -79,6 +92,7 @@ const NewProductModal = ({ show, handleClose, handleAddNewProduct }) => {
         setProductStockQuantity('');
         setSelectedProductImages([]);
         setPreviewProductImages([]);
+        setSelectedCategories([]);
         handleClose();
       })
       .catch((error) => console.log(error));
@@ -127,6 +141,21 @@ const NewProductModal = ({ show, handleClose, handleAddNewProduct }) => {
               value={productStockQuantity}
               onChange={handleProductStockQuantityChange}
             />
+          </Form.Group>
+          <Form.Group controlId="productCategories">
+            <Form.Label>Categories</Form.Label>
+            <div>
+              {categories.map((category) => (
+                <Button
+                  key={category.title}
+                  variant={selectedCategories.includes(category._id) ? 'primary' : 'outline-primary'}
+                  onClick={() => handleCategoryClick(category._id)}
+                  className="mr-2"
+                >
+                  {category.title}
+                </Button>
+              ))}
+            </div>
           </Form.Group>
           <Form.Group controlId="productImages">
             <Form.Label>Images</Form.Label>

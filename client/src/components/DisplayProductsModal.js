@@ -1,6 +1,6 @@
 import React from 'react';
 import { Modal, Button } from 'react-bootstrap';
-import CategoriesCard from "./CategoriesCard";
+import ProductsCard from "./ProductsCard";
 
 const DisplayProductsModal = ({ show, handleClose, products, handleProductDelete, handleProductEditClick }) => {
 
@@ -15,17 +15,19 @@ const DisplayProductsModal = ({ show, handleClose, products, handleProductDelete
         </Modal.Header>
         <Modal.Body>
           {products.map((product, index) => (
-            <ProductsCard
-              key={index}
-              title={product.title}
-              description={product.description}
-              price={product.price}
-              technicalInformation={product.technicalInformation}
-              stockQuantity={product.stockQuantity}
-              images={product.images.map((image) => image.url)}
-              onDelete={() => handleProductDelete(product._id)}
-              onEdit={() => handleProductEditClickWrapper(product)}
-            />
+            <div key={index}>
+              <ProductsCard
+                title={product.title}
+                description={product.description}
+                price={product.price}
+                technicalInformation={product.technicalInformation}
+                stockQuantity={product.stockQuantity}
+                categories={product.categories}
+                images={product.images.map((image) => image.url)}
+                onDelete={() => handleProductDelete(product._id)}
+                onEdit={() => handleProductEditClickWrapper(product)}
+              />
+            </div>
           ))}
         </Modal.Body>
         <Modal.Footer>

@@ -5,9 +5,9 @@ import './index.css';
 import NewCategoryModal from './components/NewCategoryModal';
 import DisplayCategoriesModal from './components/DisplayCategoriesModal';
 import EditCategoriesModal from './components/EditCategoriesModal';
-import NewProductModal from './components/NewProductModal'; // Add the new product modal
-import DisplayProductsModal from './components/DisplayProductsModal'; // Add the display products modal
-import EditProductsModal from './components/EditProductsModal'; // Add the edit products modal
+import NewProductModal from './components/NewProductModal'; 
+import DisplayProductsModal from './components/DisplayProductsModal'; 
+import EditProductsModal from './components/EditProductsModal'; 
 import "bootstrap/dist/css/bootstrap.min.css";
 
 function AdminMain() {
@@ -43,10 +43,6 @@ function AdminMain() {
   const [categories, setCategories] = useState([]); 
   const [categoryToEdit, setCategoryToEdit] = useState(null); 
 
-  useEffect(() => {
-    fetchCategories(); 
-  }, []);
-
   const fetchCategories = () => {
     axios
       .get("http://localhost:4000/category")
@@ -57,6 +53,10 @@ function AdminMain() {
         console.error("Error fetching categories:", error);
       });
   };
+  
+  useEffect(() => {
+    fetchCategories();
+  }, []);
 
   const handleCategoryDelete = (categoryId) => {
     axios
@@ -197,6 +197,7 @@ function AdminMain() {
 
   const handleProductEditClick = (product) => {
     setProductToEdit(product);
+    console.log(product)
     setShowEditProductModal(true);
   };
 
@@ -227,7 +228,7 @@ function AdminMain() {
         handleClose={handleCloseViewCategoriesModal}
         categories={categories}
         handleCategoryDelete={handleCategoryDelete}
-        handleCategoryEditClick={handleEditClick} // Update the prop name to handleCategoryEditClick
+        handleEditClick={handleEditClick} 
       />
       <DisplayProductsModal
         show={showViewProductsModal}
@@ -245,6 +246,7 @@ function AdminMain() {
         show={showNewProductModal}
         handleClose={handleCloseNewProductModal}
         handleAddNewProduct={handleAddNewProduct}
+        categories={categories}
       />
       {categoryToEdit && (
         <EditCategoriesModal
@@ -256,11 +258,12 @@ function AdminMain() {
       )}
       {productToEdit && (
         <EditProductsModal
-          show={showEditProductModal}
-          handleClose={handleCloseEditProductModal}
-          productToEdit={productToEdit}
-          handleSaveProductChanges={handleSaveProductChanges}
-        />
+        show={showEditProductModal}
+        handleClose={handleCloseEditProductModal}
+        productToEdit={productToEdit}
+        handleSaveProductChanges={handleSaveProductChanges}
+        categories={categories}
+      />
       )}
     </div>
   );
