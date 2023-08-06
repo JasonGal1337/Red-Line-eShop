@@ -1,0 +1,14 @@
+.centered-div {
+    text-align: center;
+    margin-top: 50px; 
+    margin-bottom: 50px;
+  }
+  
+  .centered-div h1 {
+    font-size: 2rem; 
+  }
+  
+  .centered-div h3 {
+    font-size: 1.2rem; 
+    color: #666; 
+  }

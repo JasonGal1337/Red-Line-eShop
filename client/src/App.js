@@ -5,6 +5,7 @@ import Homepage from "./homepage";
 import Admin from "./admin";
 import AdminMain from "./AdminMain";
 import NavBar from "./components/NavBar"
+import Footer from "./components/Footer"
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
             <Route path="/admin" element={<Admin />} />
             <Route path="/admin/main" element={<AdminMain />} />
           </Routes>
+          <Footer />
         </div>
       </Router>
     </div>
