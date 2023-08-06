@@ -57,6 +57,10 @@ const EditProductsModal = ({ show, handleClose, productToEdit, handleSaveProduct
     });
   };
 
+  const handleClearCategories = () => {
+    setSelectedCategories(''); 
+  };
+
   const handleProductImageChange = (e) => {
     const files = e.target.files;
     const newImages = Array.from(files);
@@ -148,6 +152,9 @@ const EditProductsModal = ({ show, handleClose, productToEdit, handleSaveProduct
                 </Button>
               ))}
             </div>
+            <Button variant="danger" onClick={handleClearCategories}>
+              Clear Categories
+            </Button>
           </Form.Group>
           <Form.Group controlId="productImages">
             <Form.Label>Images</Form.Label>

@@ -1,0 +1,10 @@
+.navbar-container {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 10px;
+  }
+  
+  .navbar-content {
+    margin: 10px;
+  }

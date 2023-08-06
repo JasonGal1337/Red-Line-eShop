@@ -4,12 +4,14 @@ import Signup from "./signup";
 import Homepage from "./homepage";
 import Admin from "./admin";
 import AdminMain from "./AdminMain";
+import NavBar from "./components/NavBar"
 
 function App() {
   return (
     <div className="App">
       <Router>
         <div>
+        <NavBar />
           <Routes>
             <Route path="/" element={<Login />} />
             <Route path="/signup" element={<Signup />} />

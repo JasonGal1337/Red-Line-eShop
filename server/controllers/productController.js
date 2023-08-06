@@ -27,7 +27,7 @@ const postOneProduct = async (req, res) => {
         console.log('Error missing required fields or images');
         return res.status(400).json({ error: 'Missing required fields or images' });
       }
-
+      
       const uploadPromises = images.map((image) => cloudinary.uploader.upload(image.path, { folder: 'Products' }));
       const uploadedImages = await Promise.all(uploadPromises);
 
@@ -69,6 +69,7 @@ const updateProduct = async (req, res) => {
     try {
       const { title, description, price, technicalInformation, stockQuantity, categories } = req.body;
       const images = req.files;
+      const parsedCategories = JSON.parse(categories);
 
       if (!title || !description || !price || !technicalInformation || !stockQuantity || !categories) {
         console.log('Error missing required fields');
@@ -81,7 +82,7 @@ const updateProduct = async (req, res) => {
         price,
         technicalInformation,
         stockQuantity,
-        categories,
+        categories: parsedCategories,
       };
 
       // Check if new images were uploaded

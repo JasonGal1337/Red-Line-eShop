@@ -5,7 +5,9 @@ import axios from "axios";
 
 function Homepage() {
     return (
-        <div>Hello</div>
+    <div>
+      <div>Hello</div>
+    </div>
     );
 };
 

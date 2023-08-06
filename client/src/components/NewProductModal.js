@@ -33,11 +33,16 @@ const NewProductModal = ({ show, handleClose, handleAddNewProduct, categories })
   };
 
   const handleCategoryClick = (categoryId) => {
+    // Extract the category ID if it's an object
+    const categoryIdValue = typeof categoryId === 'object' ? categoryId._id : categoryId;
+  
     setSelectedCategories((prevSelectedCategories) => {
-      if (prevSelectedCategories.includes(categoryId)) {
-        return prevSelectedCategories.filter((id) => id !== categoryId);
+      if (prevSelectedCategories.includes(categoryIdValue)) {
+        // If the category is already selected, remove it from the array
+        return prevSelectedCategories.filter((id) => id !== categoryIdValue);
       } else {
-        return [...prevSelectedCategories, categoryId];
+        // If the category is not selected, create a new array with the selected category
+        return [...prevSelectedCategories, categoryIdValue];
       }
     });
   };
