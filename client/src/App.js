@@ -6,6 +6,7 @@ import Admin from "./admin";
 import AdminMain from "./AdminMain";
 import NavBar from "./components/NavBar"
 import Footer from "./components/Footer"
+import Category from "./Category"
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
             <Route path="/homepage" element={<Homepage />} />
             <Route path="/admin" element={<Admin />} />
             <Route path="/admin/main" element={<AdminMain />} />
+            <Route path="/category/:id" element={<Category />} />
           </Routes>
           <Footer />
         </div>

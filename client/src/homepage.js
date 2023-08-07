@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { Link } from 'react-router-dom';
 import Slider from "../src/components/Slider";
 import CategoryGrid from "./components/CategoryGrid"; 
 import "./styles/homepage.css"
@@ -31,7 +32,9 @@ function Homepage() {
         </div>
         <div className="category-grid">
           {categoryData.map((category) => (
-            <CategoryGrid key={category._id} title={category.title} imageUrl={category.image.url} />
+            <Link key={category._id} to={`/category/${category._id}`} className="category-grid-item">
+            <CategoryGrid title={category.title} imageUrl={category.image.url} />
+          </Link>
           ))}
         </div>
   
