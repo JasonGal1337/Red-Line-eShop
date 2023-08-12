@@ -8,7 +8,7 @@ const NavBar = () => {
   return (
       <Navbar bg="light" expand="lg" className="navbar-container fixed-top">
         <div className="navbar-content">
-          <Form inline onSubmit={handleSearchSubmit}>
+          <Form >
             <FormControl type="text" name="search" placeholder="Search" className="mr-sm-2" />
           </Form>
         </div>

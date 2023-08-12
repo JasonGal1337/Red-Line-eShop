@@ -1,0 +1,162 @@
+  .carousel-img {
+    min-height: 500px; 
+    width: auto; 
+    margin: 0 auto;
+  }
+  
+  .description-container {
+    border-left: dashed 1px black;
+    padding-left: 50px;
+    margin-top: 30px; 
+    margin-bottom: 30px; 
+  }
+  
+  .container {
+    width: 100%;
+    margin: 0 auto;
+    padding: 40px; 
+  }
+  
+  .grid-container {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 30px; 
+    align-items: center;
+    column-gap: 200px;
+  }
+  
+  .carousel-container {
+    margin-top: 120px; 
+  }
+  
+  .flex-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-top: 20px; 
+  }
+  
+  #sizeDropdown {
+    width: 100%;
+    margin-bottom: 20px;
+  }
+  
+  .add-to-cart-button {
+    width: 100%;
+    margin-top: 10px;
+    height: 50px;
+    background: linear-gradient(to bottom, #007bff, #00ced1);
+    border: none;
+    color: white;
+    font-weight: bold;
+  }
+  
+  .add-to-cart-button:hover {
+    background: linear-gradient(to bottom, #00ced1, #007bff);
+    transition: background 0.3s ease;
+  }
+  
+  .dropdown-button {
+    width: 100%;
+    margin-top: 10px;
+    height: 50px;
+    background: linear-gradient(to bottom, #ffd700, #cd9575); 
+    border: none;
+    color: white;
+    font-weight: bold;
+  }
+  
+  .dropdown-button:hover {
+    background: linear-gradient(to bottom, #cd9575, #ffd700); 
+    transition: background 0.3s ease;
+  }
+  
+  .dropdown-component {
+    width: 100%;
+    text-align: center;
+    font-weight: bold;
+  }
+
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+  background-color: lightgray;
+}
+
+h1 , h2, p, span {
+    margin: 10px;
+}
+
+p {
+    font-size: 20px;
+}
+
+span {
+    font-size: 12px;
+}
+
+/* Review Modal */
+.modal {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+  }
+  
+  .modal-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    max-width: 400px;
+  }
+  
+  .close-button {
+    border: none;
+    background-color: transparent;
+    font-size: 16px;
+    cursor: pointer;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    color: gray;
+  }
+  
+  /* Review Input */
+  .review-input {
+    width: 100%;
+    height: 100px;
+    padding: 10px;
+    margin-top: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  .submit-review-button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+  }
+  
+  .review {
+    margin-top: 20px;
+    border-top: 1px solid #ccc;
+    padding-top: 20px;
+  }
+  
+  .review h4 {
+    margin: 0;
+    font-weight: bold;
+  }
+  
+  .review-comment {
+    margin-top: 5px;
+  }

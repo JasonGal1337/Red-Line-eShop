@@ -1,0 +1,42 @@
+.star-rating {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 10px;
+  }
+  
+  .star-icons {
+    display: flex;
+    gap: 5px; /* Adjust spacing between stars */
+  }
+  
+  .star-icon {
+    cursor: pointer;
+    font-size: 24px; /* Adjust star icon size */
+    color: #ccc; /* Default star color */
+    transition: color 0.2s ease;
+  }
+  
+  .star-icon.full {
+    color: #f0b400; /* Filled star color */
+  }
+  
+  .star-icon.empty {
+    color: #ccc; /* Empty star color */
+  }
+  
+  .star-icon.read-only {
+    cursor: default;
+  }
+  
+  .toggle-read-only {
+    background: none;
+    border: none;
+    color: #007bff; /* Button color */
+    cursor: pointer;
+    margin-top: 5px;
+  }
+
+  .save-rating-button {
+    width: auto;
+  }

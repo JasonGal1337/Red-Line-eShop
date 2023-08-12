@@ -4,9 +4,10 @@ import Signup from "./signup";
 import Homepage from "./homepage";
 import Admin from "./admin";
 import AdminMain from "./AdminMain";
-import NavBar from "./components/NavBar"
-import Footer from "./components/Footer"
-import Category from "./Category"
+import NavBar from "./components/NavBar";
+import Footer from "./components/Footer";
+import Category from "./Category";
+import Product from "./Product";
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
             <Route path="/admin" element={<Admin />} />
             <Route path="/admin/main" element={<AdminMain />} />
             <Route path="/category/:id" element={<Category />} />
+            <Route path="/product/:id" element={<Product />} />
           </Routes>
           <Footer />
         </div>
