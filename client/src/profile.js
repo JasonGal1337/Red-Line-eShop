@@ -1,6 +1,6 @@
-import "../src/styles/index.css"
-import React, { useState, useEffect } from "react"; // Import useEffect
+import React, { useState, useEffect } from "react";
 import axios from "axios";
+import "../src/styles/index.css"
 
 function Profile() {
     const [name, setName] = useState("");
@@ -10,9 +10,31 @@ function Profile() {
     const [token, setToken] = useState("");
 
     useEffect(() => {
-        const token = localStorage.getItem("token");
-        if (token) {
-            setToken(token);
+        const storedToken = localStorage.getItem("token");
+        if (storedToken) {
+            setToken(storedToken);
+
+            axios
+                .post(
+                    "http://localhost:4000/user/getUserInfo",
+                    { token: storedToken },
+                    {
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                    }
+                )
+                .then(({ data }) => {
+                    console.log(data);
+                    const userData = data.userData;
+                    setName(userData.name);
+                    setSurname(userData.surname);
+                    setAddress(userData.address);
+                    setZip(userData.zip);
+                })
+                .catch((error) => {
+                    console.error("Error fetching user info:", error);
+                });
         }
     }, []);
 

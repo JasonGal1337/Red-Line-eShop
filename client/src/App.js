@@ -8,6 +8,7 @@ import NavBar from "./components/NavBar";
 import Footer from "./components/Footer";
 import Category from "./Category";
 import Product from "./Product";
+import Profile from "./profile";
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
             <Route path="/admin/main" element={<AdminMain />} />
             <Route path="/category/:id" element={<Category />} />
             <Route path="/product/:id" element={<Product />} />
+            <Route path="/profile" element={<Profile />} />
           </Routes>
           <Footer />
         </div>
