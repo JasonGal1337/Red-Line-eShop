@@ -30,9 +30,9 @@
   }
   
   .carousel-control-prev, .carousel-control-next {
-    font-size: 15rem;
-    z-index: 1;
-    text-decoration: none;
+    font-size: 15rem!important;
+    z-index: 1!important;
+    text-decoration: none!important;
   }
   
   .carousel-control-prev-icon,

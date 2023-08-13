@@ -82,16 +82,12 @@
   background-color: lightgray;
 }
 
-h1 , h2, p, span {
+h1 , h2, p {
     margin: 10px;
 }
 
 p {
     font-size: 20px;
-}
-
-span {
-    font-size: 12px;
 }
 
 /* Review Modal */

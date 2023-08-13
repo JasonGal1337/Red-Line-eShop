@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom'; // Import Link from react-router-dom
 import axios from 'axios';
 import Slider from './components/Slider';
 import ProductGrid from './components/ProductGrid';
@@ -41,13 +41,14 @@ function Category() {
         {groupedProducts.map((pair, index) => (
           <div key={index} className="product-row">
             {pair.map((product) => (
-              <ProductGrid
-                key={product._id}
-                title={product.title}
-                imageUrl={product.images[0].url}
-                imageWidth="500px"
-                imageHeight="500px"
-              />
+              <Link to={`/product/${product._id}`} key={product._id}>
+                <ProductGrid
+                  title={product.title}
+                  imageUrl={product.images[0].url}
+                  imageWidth="500px"
+                  imageHeight="500px"
+                />
+              </Link>
             ))}
           </div>
         ))}

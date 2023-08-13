@@ -64,6 +64,7 @@ const signup = async (req, res) => {
 const verify = async (req,res) => {
     if (!req.body.token) {
         res.send({ msg: false });
+        return;
     } 
     // decrypt and get back the user id 
     try {
@@ -87,8 +88,76 @@ const verify = async (req,res) => {
     }
 };
 
+const editInfo = async (req, res) => {
+  if (!req.body.token) {
+      res.send({ msg: "Token is missing" });
+      return;
+  }
+
+  try {
+      const payload = jwt.verify(req.body.token, "difficultPrivateKey");
+      if (payload) {
+          const userId = payload._id; // Extract user's ID from the payload
+
+          const updatedUser = {
+              name: req.body.name,
+              surname: req.body.surname,
+              address: req.body.address,
+              zip: req.body.zip,
+          };
+
+          // Use the 'findByIdAndUpdate' method to find and update the user's information
+          const user = await User.findByIdAndUpdate(userId, updatedUser, { new: true });
+
+          if (user) {
+              const token = jwt.sign({ _id: user._id }, "difficultPrivateKey");
+              res.send({
+                  userData: user,
+                  token: token,
+              });
+          } else {
+              res.send("User not found");
+          }
+      } else {
+          res.send("Invalid Token");
+      }
+  } catch (err) {
+      res.send("Invalid Token");
+  }
+};
+
+const getUserInfo = async (req, res) => {
+  if (!req.body.token) {
+      res.send({ msg: "Token is missing" });
+      return;
+  }
+
+  try {
+      const payload = jwt.verify(req.body.token, "difficultPrivateKey");
+      if (payload) {
+          const userId = payload._id;
+
+          const user = await User.findOne({ _id: userId });
+
+          if (user) {
+              res.send({
+                  userData: user,
+              });
+          } else {
+              res.send("User not found");
+          }
+      } else {
+          res.send("Invalid Token");
+      }
+  } catch (err) {
+      res.send("Invalid Token");
+  }
+};
+
 module.exports = {
     signup,
     login,
-    verify
+    verify,
+    editInfo,
+    getUserInfo,
 }
