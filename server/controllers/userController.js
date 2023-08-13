@@ -97,7 +97,7 @@ const editInfo = async (req, res) => {
   try {
       const payload = jwt.verify(req.body.token, "difficultPrivateKey");
       if (payload) {
-          const userId = payload._id; // Extract user's ID from the payload
+          const userId = payload.id; 
 
           const updatedUser = {
               name: req.body.name,

@@ -51,6 +51,7 @@ function Profile() {
             )
             .then(({ data }) => {
                 console.log(data);
+                alert('Profile edited successfully!')
             })
             .catch((error) => {
                 console.error("Error editing info:", error);

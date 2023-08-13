@@ -7,7 +7,7 @@ import "./styles/homepage.css"
 
 function Homepage() {
     const [categoryData, setCategoryData] = useState([]);
-  
+
     function getCategoriesData() {
       axios
         .get("http://localhost:4000/category")
