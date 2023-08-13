@@ -104,6 +104,8 @@ const editInfo = async (req, res) => {
               surname: req.body.surname,
               address: req.body.address,
               zip: req.body.zip,
+              boughtBefore: req.body.boughtBefore,
+              addedToCart: req.body.addedToCart,
           };
 
           // Use the 'findByIdAndUpdate' method to find and update the user's information

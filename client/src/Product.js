@@ -6,72 +6,88 @@ import StarRating from './components/StarRating';
 import "./styles/product.css";
 
 function Product() {
-    const { id } = useParams(); // product id
-    const [userID, setUserID] = useState(''); // get userID of logged in user in order to pass value in reviews
-    const [userName, setUserName] = useState(''); // get username to display in reviews already made for product
-    const [productData, setProductData] = useState({}); // handles product data which we get by get req in order to display
-    const [selectedSize, setSelectedSize] = useState("");
-    const [addedToCart, setAddedToCart] = useState(false);
-    const [showReviewModal, setShowReviewModal] = useState(false);
-    const [reviewText, setReviewText] = useState(""); // handles review input by user
-    const [userRating, setUserRating] = useState(productData.rating || 0); 
-    const [productReviews, setProductReviews] = useState([]); // handles review data which we get by get req in order to display
-
-    useEffect(() => {
-      axios
-        .get(`http://localhost:4000/product/${id}`)
-        .then((response) => {
-          setProductData(response.data);
-        })
-        .catch((error) => {
-          console.error('Error fetching product:', error);
-        });
-      getReviews(); 
-    }, [id]);
+  const { id } = useParams(); // product id
+  const [userID, setUserID] = useState(''); // get userID of logged in user in order to pass value in reviews
+  const [userName, setUserName] = useState(''); // get username to display in reviews already made for product
+  const [productData, setProductData] = useState({});
+  const [selectedSize, setSelectedSize] = useState("");
+  const [addedToCart, setAddedToCart] = useState([]);
+  const [showReviewModal, setShowReviewModal] = useState(false);
+  const [reviewText, setReviewText] = useState("");
+  const [userRating, setUserRating] = useState(0);
+  const [productReviews, setProductReviews] = useState([]);
+  const [boughtBefore, setBoughtBefore] = useState([]);
+  const token = localStorage.getItem("token");
 
   useEffect(() => {
-    console.log(productData);
-  }, [productData]);
-
-  function getUserID() {
-    if (localStorage.getItem("token")) {
-      return axios
-        .post("http://localhost:4000/user/verify", {
-          token: localStorage.getItem("token"),
-        })
-        .then(({ data }) => {
-          if (data.userData._id) {
-            setUserID(data.userData._id);
-            return data.userData._id;
-          }
-          return null;
-        })
-        .catch((error) => {
-          console.error("Error verifying token:", error);
-          return null;
-        });
-    } else {
-      return null;
-    }
-  }
-
-  const sendAddedToCart = () => {
     axios
-      .post(`http://localhost:4000/user/${userID}`, addedToCart)
+      .get(`http://localhost:4000/product/${id}`)
       .then((response) => {
-        console.log(response);
+        setProductData(response.data);
       })
       .catch((error) => {
-        console.error('Error adding product to user cart:', error);
+        console.error('Error fetching product:', error);
+      });
+    getReviews();
+  }, [id]);
+
+  useEffect(() => {
+    if (productData.rating !== undefined) {
+      setUserRating(productData.rating);
+    }
+  }, [productData]);
+
+  useEffect(() => {
+    if (token) {
+      getUserInfo();
+    }
+  }, []);
+
+  function getUserInfo() {
+    axios
+      .post("http://localhost:4000/user/getUserInfo", {
+        token: token,
+      })
+      .then(({ data }) => {
+        if (data.userData._id) {
+          setBoughtBefore(data.userData.boughtBefore);
+          setAddedToCart(data.userData.addedToCart);
+          setUserID(data.userData._id);
+        }
+      })
+      .catch((error) => {
+        console.error("Error verifying token:", error);
       });
   }
 
+  function sendAddedToCart() {
+    axios
+        .post(
+            "http://localhost:4000/user/editInfo",
+            { addedToCart , boughtBefore , token },
+            {
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            }
+        )
+        .then(({ data }) => {
+            console.log(data);
+            alert('Product added successfully!')
+        })
+        .catch((error) => {
+            console.error("Error, couldn't add to cart:", error);
+        });
+}
+
   async function addToCart() {
     try {
-      const userID = await getUserID();
 
       if (userID) {
-        setAddedToCart(productData._id);
+        const cartItem = addedToCart.concat(productData._id);
+        const boughtBeforeItem = boughtBefore.concat(productData._id);
+        setAddedToCart(cartItem);
+        setBoughtBefore(boughtBeforeItem);
         sendAddedToCart();
       } else {
         alert("Please login first");
@@ -83,20 +99,19 @@ function Product() {
 
   const submitReview = async () => {
     try {
-      const userID = await getUserID();
-
+  
       if (userID) {
         const newReview = {
           product: id,
           comment: reviewText,
           user: userID,
         };
-        axios.post("http://localhost:4000/review", newReview).then((response) => {
-          console.log(response);
-          setShowReviewModal(false);
-          setReviewText("");
-          getReviews();
-        });
+  
+        const response = await axios.post("http://localhost:4000/review", newReview);
+        console.log(response);
+        setShowReviewModal(false);
+        setReviewText("");
+        getReviews();
       } else {
         alert("Please login first");
       }
@@ -198,7 +213,7 @@ function Product() {
     <div className="reviews-container">
       {productReviews.map((review, index) => (
         <div key={index} className="review">
-          <h4>{review.user}:</h4>
+          <h4>{review.user} says:</h4>
           <p className="review-comment">{review.comment}</p>
         </div>
       ))}
