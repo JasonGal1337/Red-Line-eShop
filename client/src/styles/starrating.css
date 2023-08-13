@@ -38,5 +38,15 @@
   }
 
   .save-rating-button {
-    width: auto; 
+    background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  }
+
+  button.save-rating-button:hover {
+    background-color: #0056b3;
   }

@@ -6,25 +6,28 @@ import StarRating from './components/StarRating';
 import "./styles/product.css";
 
 function Product() {
-    const { id } = useParams();
-    const [productData, setProductData] = useState({});
+    const { id } = useParams(); // product id
+    const [userID, setUserID] = useState(''); // get userID of logged in user in order to pass value in reviews
+    const [userName, setUserName] = useState(''); // get username to display in reviews already made for product
+    const [productData, setProductData] = useState({}); // handles product data which we get by get req in order to display
     const [selectedSize, setSelectedSize] = useState("");
     const [addedToCart, setAddedToCart] = useState(false);
-    const [userID, setUserID] = useState("");
     const [showReviewModal, setShowReviewModal] = useState(false);
-    const [reviewText, setReviewText] = useState("");
+    const [reviewText, setReviewText] = useState(""); // handles review input by user
     const [userRating, setUserRating] = useState(productData.rating || 0); 
+    const [productReviews, setProductReviews] = useState([]); // handles review data which we get by get req in order to display
 
-  useEffect(() => {
-    axios
-      .get(`http://localhost:4000/product/${id}`)
-      .then((response) => {
-        setProductData(response.data);
-      })
-      .catch((error) => {
-        console.error('Error fetching product:', error);
-      });
-  }, []);
+    useEffect(() => {
+      axios
+        .get(`http://localhost:4000/product/${id}`)
+        .then((response) => {
+          setProductData(response.data);
+        })
+        .catch((error) => {
+          console.error('Error fetching product:', error);
+        });
+      getReviews(); 
+    }, [id]);
 
   useEffect(() => {
     console.log(productData);
@@ -39,6 +42,7 @@ function Product() {
         .then(({ data }) => {
           if (data.userData._id) {
             setUserID(data.userData._id);
+            return data.userData._id;
           }
           return null;
         })
@@ -91,7 +95,7 @@ function Product() {
           console.log(response);
           setShowReviewModal(false);
           setReviewText("");
-          refreshReviews();
+          getReviews();
         });
       } else {
         alert("Please login first");
@@ -101,10 +105,15 @@ function Product() {
     }
   };
 
-  const refreshReviews = () => {
-    axios.get(`http://localhost:4000/product/${id}`).then((response) => {
-      setProductData(response.data);
-    });
+  const getReviews = () => {
+    axios.get(`http://localhost:4000/review`)
+      .then((response) => {
+        const reviewsForProduct = response.data.filter(review => review.product === id);
+        setProductReviews(reviewsForProduct);
+      })
+      .catch((error) => {
+        console.error('Error fetching reviews:', error);
+      });
   };
 
   const handleRatingChange = (newRating) => {
@@ -117,14 +126,12 @@ function Product() {
       return;
     }
   
-    // Update the productData.rating with the new userRating
     const updatedProductData = { ...productData, rating: userRating };
   
-    // Send the updated productData to the server
     axios.post(`http://localhost:4000/product/${id}`, updatedProductData)
       .then((response) => {
         console.log("Product rating updated:", response.data);
-        setProductData(updatedProductData); // Update the local state
+        setProductData(updatedProductData); 
       })
       .catch((error) => {
         console.error('Error updating product rating:', error);
@@ -187,26 +194,26 @@ function Product() {
             {productData.technicalInformation}
           </Tab>
           <Tab eventKey="reviews" title="Reviews">
-            {productData.reviews ? (
-              <div>
-                {productData.reviews.map((review, index) => (
-                  <div key={index} className="review">
-                    <h4>{review.user}:</h4>
-                    <p className="review-comment">{review.comment}</p>
-                  </div>
-                ))}
-              </div>
-            ) : (
-              "No reviews yet."
-            )}
-            <button onClick={() => setShowReviewModal(true)}>Review This Product</button>
-            <div className="rate-product">
+  {productReviews.length > 0 ? (
+    <div className="reviews-container">
+      {productReviews.map((review, index) => (
+        <div key={index} className="review">
+          <h4>{review.user}:</h4>
+          <p className="review-comment">{review.comment}</p>
+        </div>
+      ))}
+    </div>
+  ) : (
+    "No reviews yet."
+  )}
+            <div className="star-rating-container">
               <p>Rate This Product</p>
               <StarRating
                 userRating={userRating}
                 handleRatingChange={handleRatingChange}
                 checkUserID={checkUserID}
               />
+              <button className="review-button" onClick={() => setShowReviewModal(true)}>Review This Product</button>
             </div>
             {showReviewModal && (
               <div className="modal">

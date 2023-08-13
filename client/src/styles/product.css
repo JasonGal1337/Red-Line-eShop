@@ -154,5 +154,39 @@ p {
   }
   
   .review-comment {
-    margin-top: 5px;
+    margin-top: 15px;
+    padding: 10px;
+    border-radius: 10px;
+    background-color: #f0f0f0;
+    display: inline-block;
+    max-width: 70%;
+  }
+
+  .reviews-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: flex-start;
+  }
+
+  .star-rating-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+  }
+
+  button.review-button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    margin: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+  
+  button.review-button:hover {
+    background-color: #0056b3;
   }
