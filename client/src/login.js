@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
 import "../src/styles/index.css"
 import { useState } from "react";
 import axios from "axios";
@@ -8,6 +9,13 @@ function Login() {
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+
+    useEffect(() => {
+      const token = localStorage.getItem("token");
+      if (token) {
+          navigate("/homepage");
+      }
+  }, []);
 
     function toSignup() {
         navigate("/signup");

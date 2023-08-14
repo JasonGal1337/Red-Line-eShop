@@ -60,42 +60,43 @@ function Product() {
       });
   }
 
-  function sendAddedToCart() {
-    axios
-        .post(
-            "http://localhost:4000/user/editInfo",
-            { addedToCart , boughtBefore , token },
-            {
-                headers: {
-                    "Content-Type": "application/json",
-                },
-            }
-        )
-        .then(({ data }) => {
-            console.log(data);
-            alert('Product added successfully!')
-        })
-        .catch((error) => {
-            console.error("Error, couldn't add to cart:", error);
-        });
-}
-
-  async function addToCart() {
-    try {
-
-      if (userID) {
-        const cartItem = addedToCart.concat(productData._id);
-        const boughtBeforeItem = boughtBefore.concat(productData._id);
-        setAddedToCart(cartItem);
-        setBoughtBefore(boughtBeforeItem);
-        sendAddedToCart();
-      } else {
-        alert("Please login first");
-      }
-    } catch (error) {
-      console.error("Error while adding to cart:", error);
-    }
+  function sendAddedToCart(newAddedToCart, newBoughtBefore) {
+    return axios
+      .post(
+        "http://localhost:4000/user/editInfo",
+        { addedToCart: newAddedToCart, boughtBefore: newBoughtBefore, token },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      )
+      .then((response) => {
+        console.log(response);
+        alert('Product added successfully!');
+      })
+      .catch((error) => {
+        console.error("Error, couldn't add to cart:", error);
+      });
   }
+
+async function addToCart() {
+  try {
+    if (userID) {
+      const cartItem = addedToCart.concat(productData._id);
+      const boughtBeforeItem = boughtBefore.concat(productData._id);
+
+      await sendAddedToCart(cartItem, boughtBeforeItem);
+
+      setAddedToCart(cartItem);
+      setBoughtBefore(boughtBeforeItem);
+    } else {
+      alert("Please login first");
+    }
+  } catch (error) {
+    console.error("Error while adding to cart:", error);
+  }
+}
 
   const submitReview = async () => {
     try {
