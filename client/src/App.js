@@ -12,6 +12,7 @@ import Profile from "./profile";
 import Cart from "./Cart";
 
 function App() {
+
   return (
     <div className="App">
       <Router>

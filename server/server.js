@@ -12,6 +12,7 @@ const productRouter = require("./routers/productRouter");
 const categoryRouter = require("./routers/categoryRouter");
 const reviewRouter = require("./routers/reviewRouter");
 const orderRouter = require("./routers/orderRouter");
+const stripeRouter = require("./utility/stripe");
 
 app.use(
     cors({
@@ -25,6 +26,7 @@ app.use("/product", productRouter);
 app.use("/category", categoryRouter);
 app.use("/review", reviewRouter);
 app.use("/order", orderRouter);
+app.use("/api/stripe", stripeRouter);
 
 app.listen(4000, () => {
     console.log("server is running on port 4000");

@@ -5,6 +5,7 @@ import axios from "axios";
 import BuyAgainCard from './components/BuyAgainCard';
 import CartProductCard from './components/CartProductCard';
 import SimilarProductsCard from './components/SimilarProductsCard';
+import Checkout from "./components/Checkout";
 
 const Cart = () => {
   const { id } = useParams();
@@ -164,7 +165,7 @@ const Cart = () => {
       <div className="right-column">
         <div className="final-price">
           <h2>Total Price: {formatPrice(totalPrice)}</h2>
-          <button className="complete-purchase-button">Complete Purchase</button>
+          <Checkout />
         </div>
         <div className="additional-options">
           <button className="subscribe-button">Subscribe to Newsletter</button>

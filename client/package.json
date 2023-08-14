@@ -20,7 +20,10 @@
     "react-rating": "^2.0.5",
     "react-router-dom": "^6.14.1",
     "react-scripts": "5.0.1",
-    "web-vitals": "^2.1.4"
+    "web-vitals": "^2.1.4",
+    "react-stripe-checkout": "^2.6.3",
+    "stripe": "^12.18.0",
+    "uuid": "^9.0.0"
   },
   "scripts": {
     "start": "react-scripts start",
