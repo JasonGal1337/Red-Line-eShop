@@ -47,7 +47,7 @@
     margin: 0;
   }
   
-  .similar-products h2, .buy-again h2 {
+  .similar-products-container h2,  .buy-again-products-container h2, .arrival-time {
     margin: 20px 0;
     background-color: #ffc700; /* Light orange */
     padding: 10px;
@@ -87,4 +87,16 @@
   .complete-purchase-button {
     height: 50px;
     margin-top: 100px;
+  }
+
+  .buy-again-container, .similar-products-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .buy-again-products, .similar-products {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
   }

@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Navbar, Nav, FormControl, Form } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import '../styles/navbar.css';
 
 const NavBar = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userID, setUserID] = useState('');
+  const navigate = useNavigate();
 
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
@@ -21,6 +22,7 @@ const NavBar = () => {
     localStorage.removeItem("token");
     setIsLoggedIn(false);
     setUserID(''); 
+    navigate('/');
   };
 
   function getUserID() {

@@ -83,13 +83,17 @@ function Product() {
 async function addToCart() {
   try {
     if (userID) {
-      const cartItem = addedToCart.concat(productData._id);
-      const boughtBeforeItem = boughtBefore.concat(productData._id);
+      if(!addedToCart.includes(productData._id)){
+        const cartItem = addedToCart.concat(productData._id);
+        const boughtBeforeItem = boughtBefore.concat(productData._id);
 
       await sendAddedToCart(cartItem, boughtBeforeItem);
 
       setAddedToCart(cartItem);
       setBoughtBefore(boughtBeforeItem);
+      } else {
+        alert("Product already added to cart")
+      }
     } else {
       alert("Please login first");
     }
