@@ -137,6 +137,7 @@ const getUserInfo = async (req, res) => {
   try {
       const payload = jwt.verify(req.body.token, "difficultPrivateKey");
       if (payload) {
+        console.log(payload)
           const userId = payload.id;
 
           const user = await User.findOne({ _id: userId });

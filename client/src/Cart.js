@@ -93,6 +93,36 @@ const Cart = () => {
     product.categories.some(category => cartProductCategories.includes(category))
   );
 
+  const removeFromCart = (productId) => {
+    const updatedCart = cartProducts.filter((product) => product._id !== productId);
+    setCartProducts(updatedCart);
+
+    // Update addedToCart state for the user
+    const updatedAddedToCart = userInfo.addedToCart.filter((id) => id !== productId);
+    sendUpdatedAddedToCart(updatedAddedToCart);
+  };
+
+  // Function to send updated addedToCart data to the server
+  const sendUpdatedAddedToCart = (updatedAddedToCart) => {
+    axios
+      .post(
+        "http://localhost:4000/user/editInfo",
+        { addedToCart: updatedAddedToCart, token: localStorage.getItem("token") },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      )
+      .then((response) => {
+        console.log(response);
+        alert("Product removed from cart successfully!");
+      })
+      .catch((error) => {
+        console.error("Error, couldn't update cart:", error);
+      });
+  };
+
   return (
     <div className="cart-container">
       <div className="left-column">
@@ -124,6 +154,12 @@ const Cart = () => {
                 <button onClick={() => handleQuantityChange(product._id, 1)}> + </button>
               </div>
               <h1>Price: {product.price} €</h1>
+              <button
+            className="remove-from-cart-button"
+            onClick={() => removeFromCart(product._id)}
+          >
+            Remove from Cart
+          </button>
             </div>
           ))}
         </div>
