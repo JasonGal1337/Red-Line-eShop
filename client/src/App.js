@@ -10,6 +10,7 @@ import Category from "./Category";
 import Product from "./Product";
 import Profile from "./profile";
 import Cart from "./Cart";
+import Search from "./Search";
 
 function App() {
 
@@ -28,6 +29,7 @@ function App() {
             <Route path="/category/:id" element={<Category />} />
             <Route path="/product/:id" element={<Product />} />
             <Route path="/cart/:id" element={<Cart />} />
+            <Route path="/search/:query" element={<Search />} />
           </Routes>
           <Footer />
         </div>

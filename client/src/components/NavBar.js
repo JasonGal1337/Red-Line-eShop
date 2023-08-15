@@ -42,10 +42,16 @@ const NavBar = () => {
     }
   }
 
+  const handleSearchSubmit = (event) => {
+    event.preventDefault();
+    const searchData = event.target.elements.search.value;
+    navigate(`/search/${searchData}`);
+  };
+
   return (
     <Navbar bg="light" expand="lg" className="navbar-container fixed-top">
       <div className="navbar-content">
-        <Form>
+        <Form onSubmit={handleSearchSubmit}>
           <FormControl type="text" name="search" placeholder="Search" className="mr-sm-2" />
         </Form>
       </div>

@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Navbar, Nav, FormControl, Form } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
 import axios from 'axios';
-import SearchCategoriesCard from "./SearchCategoriesCard";
-import SearchProductsCard from "./SearchProductsCard";
+import { useParams } from 'react-router-dom';
+import SearchProductsCard from './components/SearchProductsCard';
+import "./styles/search.css"
 
 const Search = () => {
-  const [showResults, setShowResults] = useState(false);
-  const [searchResult, setSearchResult] = useState({ products: [], categories: [] });
+  const { query } = useParams();
+  const [searchResults, setSearchResults] = useState({ products: [], categories: [] });
   const [categories, setCategories] = useState([]);
   const [products, setProducts] = useState([]);
 
@@ -16,7 +15,7 @@ const Search = () => {
       .get('http://localhost:4000/product')
       .then((response) => {
         setProducts(response.data);
-        return axios.get('http://localhost:4000/categories');
+        return axios.get('http://localhost:4000/category');
       })
       .then((categoriesResponse) => {
         setCategories(categoriesResponse.data);
@@ -27,29 +26,31 @@ const Search = () => {
   }
 
   useEffect(() => {
+    console.log(query)
     fetchProductsAndCategories();
+    filterSearch();
+    console.log(searchResults)
   }, []);
 
-  const handleSearchSubmit = (event) => {
-    event.preventDefault();
-    const searchData = event.target.elements.search.value;
+  const filterSearch = () => {
 
     // Filter products and categories based on search data
-    const matchedProducts = products.filter(product => product.title.includes(searchData));
-    const matchedCategories = categories.filter(category => category.title.includes(searchData));
+    const matchedProducts = products.filter(product => product.title.includes(query));
+    const matchedCategories = categories.filter(category => category.title.includes(query));
 
     // Update the search result state
-    setSearchResult({
+    setSearchResults({
       products: matchedProducts,
       categories: matchedCategories,
     });
-
-    // Set showResults to true to display the results
-    setShowResults(true);
   };
 
   return (
-      <div></div>  
+      <div className="search-container">Hello
+        {searchResults.products.map((product)=> {
+            <SearchProductsCard key={product._id} title={product.title} price={product.price} images={product.images}/>
+        })}
+      </div>  
   );
 };
 

@@ -27,6 +27,7 @@ function Login() {
         if(data.token){
           localStorage.setItem("token", data.token);
           navigate("/homepage");
+          window.location.reload();
         } else {
           alert(data.msg);
         }
